@@ -1,0 +1,26 @@
+{
+    "appName" : "Vignt",
+    "database": {
+        "default": {
+            "dsn": "mysql:host=localhost;dbname=tez",
+            "username": "root",
+            "password": ""
+        },
+        "local": {
+            "dsn": "mysql:host=localhost;dbname=tesvignt",
+            "username": "root",
+            "password": ""
+        },
+        "example": {
+            "dsn": "mysql:host=yourdbhost;dbname=yourdbname",
+            "username": "yourdbusername",
+            "password": "yourdbpassword"
+        },
+        "example_port": {
+            "dsn": "mysql:host=yourdbhost;port=yourdbport;dbname=yourdbname",
+            "username": "yourdbusername",
+            "password": "yourdbpassword"
+        }
+    },
+    "exceptionHandler" : "vigntexception"
+}

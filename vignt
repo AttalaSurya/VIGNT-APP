@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+require 'vendor/autoload.php';
+require 'autoload.vignt';
+
+use Vignt\Command;
+use Symfony\Component\Console\Application;
+use Vignt\Command\MakeMigrationCommand;
+use Vignt\Command\RunMigrationsCommand;
+use Vignt\Command\RollbackMigrationsCommand;
+use Vignt\Command\CheckMigrationsCommand;
+use Vignt\Command\ListMigrationsCommand;
+
+$application = new Application();
+$application->add(new Command\StartCommand());
+$application->add(new Command\CreateModelCommand());
+$application->add(new MakeMigrationCommand());
+$application->add(new RunMigrationsCommand());
+$application->add(new RollbackMigrationsCommand());
+$application->add(new CheckMigrationsCommand());
+$application->add(new ListMigrationsCommand());
+$application->run();

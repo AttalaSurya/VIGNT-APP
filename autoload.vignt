@@ -1,0 +1,23 @@
+<?php
+function incDir($path) {
+    $dirs = array_filter(glob("$path/*"), 'is_dir');
+    if (count($dirs) > 0) {
+        foreach ($dirs as $dir) {
+            incDir($dir);
+        }
+    }
+    $file = glob($path . "/*.ikatta.php");
+    if (count($file) > 0) {
+        foreach ($file as $component) {
+            require_once $component;
+        }
+    }
+    $file = glob($path . "/*.ikatta.php");
+    if (count($file) > 0) {
+        foreach ($file as $component) {
+            require_once $component;
+        }
+    }
+}
+
+incDir('app');

@@ -1,0 +1,95 @@
+<?php
+
+class VigntMigrate {
+    private $pdo;
+    
+    private function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
+    
+    public static function connection($connectionName) {
+        $config = self::loadConfig();
+        
+        if (!isset($config['database'][$connectionName])) {
+            throw new Exception("Connection '$connectionName' not found in config.");
+        }
+
+        $dbConfig = $config['database'][$connectionName];
+        
+        try {
+            $pdo = new PDO($dbConfig['dsn'], $dbConfig['username'], $dbConfig['password']);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return new self($pdo);
+        } catch (PDOException $e) {
+            throw new Exception("Connection failed: " . $e->getMessage());
+        }
+    }
+
+    private static function loadConfig() {
+        $configPath = '.baseconfig';
+        if (!file_exists($configPath)) {
+            throw new Exception("Configuration file not found.");
+        }
+
+        $configContent = file_get_contents($configPath);
+        return json_decode($configContent, true);
+    }
+    
+    public function create($tableName, $callback) {
+        $table = new Table();
+        $callback($table);
+        $this->createTable($tableName, $table);
+    }
+
+    private function createTable($tableName, $table) {
+        $columns = $table->getColumns();
+        $indexes = $table->getIndexes();
+        $foreignKeys = $table->getForeignKeys();
+    
+        // Column definitions
+        $columnsSql = implode(', ', array_map(
+            function ($column, $definition) { return "$column $definition"; },
+            array_keys($columns),
+            $columns
+        ));
+    
+        $indexesSql = implode(', ', $indexes);
+    
+        $foreignKeysSql = implode(', ', $foreignKeys);
+
+        $sql = "CREATE TABLE $tableName ($columnsSql";
+        
+        if ($indexesSql) {
+            $sql .= ", $indexesSql";
+        }
+        
+        if ($foreignKeysSql) {
+            $sql .= ", $foreignKeysSql";
+        }
+        
+        $sql .= ")";
+        echo $sql;
+        $this->pdo->exec($sql);
+    }
+    
+
+    public function dropIfExists($tableName) {
+        $sql = "DROP TABLE IF EXISTS $tableName";
+        $this->pdo->exec($sql);
+    }
+    
+    public function alter($tableName, $callback) {
+        $table = new Table();
+        $callback($table);
+        $this->alterTable($tableName, $table);
+    }
+
+    private function alterTable($tableName, $table) {
+        $alterations = $table->getAlterations();
+        $alterationsSql = implode(', ', $alterations);
+        $sql = "ALTER TABLE $tableName $alterationsSql";
+        echo $sql;
+        exit();
+        $this->pdo->exec($sql);
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "name": "ikatta/vignt",
+    "description": "The simplest php framework.",
+    "autoload": {
+        "psr-4": {
+            "Vignt\\": "src/"
+        }
+    },
+    "bin": [
+        "bin/vignt"
+    ],
+    "require": {
+        "symfony/console": "^5.0"
+    }
+}

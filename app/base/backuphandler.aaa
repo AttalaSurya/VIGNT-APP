@@ -1,0 +1,229 @@
+function displayErrorTrace($message, $file, $line, $trace) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Error Trace</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.4;
+                margin: 0;
+                padding: 0;
+                color: #333;
+                background-color: #f4f4f4;
+                font-size: 1rem;
+            }
+            .container {
+                max-width: 90vw;
+                margin: 2rem auto;
+                padding: 2rem;
+                background: #fff;
+                box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+                border-radius: 0.5rem;
+            }
+            h1 {
+                font-size: 2rem; 
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 0.5rem;
+                margin-bottom: 1rem;
+                color: #e74c3c;
+            }
+            p {
+                margin: 0.5rem 0;
+                font-size: 1rem; 
+            }
+            .code-block {
+                background: #eee;
+                padding: 1rem;
+                border-left: 3px solid #e74c3c;
+                margin-bottom: 1rem;
+                overflow-x: auto;
+                font-size: 0.875rem;
+                border-radius: 0.25rem;
+                line-height: 1.2; 
+            }
+            .error-details {
+                margin-bottom: 2rem;
+            }
+            .error-details .file {
+                font-weight: bold;
+                color: #e74c3c;
+            }
+            .error-details .snippet {
+                background: #f5f5f5;
+                border: 1px solid #ddd;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+                margin-top: 0.9rem;
+                line-height: 2; 
+                font-size: 0.875rem; 
+            }
+            @media (max-width: 600px) {
+                body {
+                    font-size: 0.875rem;
+                }
+                .container {
+                    padding: 1rem;
+                }
+                h1 {
+                    font-size: 1.5rem;
+                }
+                .code-block {
+                    font-size: 0.75rem;
+                }
+                .error-details .snippet {
+                    font-size: 0.75rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Error Trace</h1>
+            <div class="error-details">
+                <p><strong>Message:</strong> <?php echo htmlspecialchars($message); ?></p>
+                <p class="file">File: <?php echo htmlspecialchars($file); ?></p>
+                <p>Line: <?php echo htmlspecialchars($line); ?></p>
+                <div class="snippet">
+                    <?php echo getCodeSnippet($file, $line); ?>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    <?php
+}
+
+V2
+
+
+
+function formatTrace($trace) {
+    $formattedTrace = '';
+    
+    foreach ($trace as $index => $frame) {
+        if (isset($frame['file']) && isset($frame['line'])) {
+            $file = htmlspecialchars($frame['file']);
+            $line = htmlspecialchars($frame['line']);
+            $function = isset($frame['function']) ? htmlspecialchars($frame['function']) : 'unknown function';
+            $class = isset($frame['class']) ? htmlspecialchars($frame['class']) . '::' : '';
+            $type = isset($frame['type']) ? htmlspecialchars($frame['type']) : '';
+
+            $formattedTrace .= "<div style='margin-bottom: 1rem;'>";
+            $formattedTrace .= "<p><strong>File:</strong> $file</p>";
+            $formattedTrace .= "<p><strong>Line:</strong> $line</p>";
+            $formattedTrace .= "<p><strong>Function:</strong> $class$type$function</p>";
+            $formattedTrace .= "</div>";
+        }
+    }
+    
+    return $formattedTrace;
+}
+
+function displayErrorTrace($message, $file, $line, $trace) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Error Trace</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.4;
+                margin: 0;
+                padding: 0;
+                color: #333;
+                background-color: #f4f4f4;
+                font-size: 1rem;
+            }
+            .container {
+                max-width: 90vw;
+                margin: 2rem auto;
+                padding: 2rem;
+                background: #fff;
+                box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+                border-radius: 0.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 0.5rem;
+                margin-bottom: 1rem;
+                color: #e74c3c;
+            }
+            p {
+                margin: 0.5rem 0;
+                font-size: 1rem;
+            }
+            .code-block {
+                background: #eee;
+                padding: 1rem;
+                border-left: 3px solid #e74c3c;
+                margin-bottom: 1rem;
+                overflow-x: auto;
+                font-size: 0.875rem;
+                border-radius: 0.25rem;
+                line-height: 1.2;
+            }
+            .error-details {
+                margin-bottom: 2rem;
+            }
+            .error-details .file {
+                font-weight: bold;
+                color: #e74c3c;
+            }
+            .error-details .snippet {
+                background: #f5f5f5;
+                border: 1px solid #ddd;
+                padding: 1rem;
+                border-radius: 0.25rem;
+                overflow-x: auto;
+                margin-top: 0.9rem;
+                line-height: 1.4;
+                font-size: 0.875rem;
+            }
+            @media (max-width: 600px) {
+                body {
+                    font-size: 0.875rem;
+                }
+                .container {
+                    padding: 1rem;
+                }
+                h1 {
+                    font-size: 1.5rem;
+                }
+                .code-block {
+                    font-size: 0.75rem;
+                }
+                .error-details .snippet {
+                    font-size: 0.75rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Error Trace</h1>
+            <div class="error-details">
+                <p><strong>Message:</strong> <?php echo htmlspecialchars($message); ?></p>
+                <p class="file">File: <?php echo htmlspecialchars($file); ?></p>
+                <p>Line: <?php echo htmlspecialchars($line); ?></p>
+                <div class="snippet">
+                    <?php echo getCodeSnippet($file, $line); ?>
+                </div>
+                <div class="code-block">
+                    <h2>Trace</h2>
+                    <?php echo formatTrace($trace); ?>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    <?php
+}
